@@ -265,8 +265,9 @@ class Spider(object):
 @click.option("-n", "--new", is_flag=True, help="不使用缓存生成")
 @click.option("-e", "--excel", is_flag=True, help="是否生成Excel")
 @click.option("-w", "--words", is_flag=True, help="是否生成词云")
+@click.option("-b", "--words_background", default=None, help="指定词云背景图")
 @click.option("-g", "--graph", is_flag=True, help="是否生成分析图")
-def main(url, max_time, vip, cons, new, excel, words, graph):
+def main(url, max_time, vip, cons, new, excel, words, words_background, graph):
     if url:
         config.url = url
     if max_time:
@@ -281,6 +282,8 @@ def main(url, max_time, vip, cons, new, excel, words, graph):
         config.need_excel = excel
     if words:
         config.need_words = words
+    if words_background:
+        config.words_background = words_background
     if graph:
         config.need_graph = graph
     Spider().run()

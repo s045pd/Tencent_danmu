@@ -9,14 +9,14 @@ import requests
 from PIL import Image
 
 from conf import config
-from log import error, info
+from log import error, info, success
 
 
 @contextmanager
 def checkTimes(level=3, msg=" "):
     timeStart = time.time()
     yield
-    info(f"{msg}cost times: {round(time.time()-timeStart,level)}s")
+    success(f"{msg}cost times: {round(time.time()-timeStart,level)}s")
 
 
 def error_log(default=None, need_raise=False):
@@ -79,7 +79,13 @@ def make_chunk(datas, length=512):
 @error_log()
 def get_pic_array(url, path):
     resp = requests.get(url)
-    info(f"GET PIC From: {url}")
+    success(f"GET PIC From: {url}")
     with open(path, "wb") as f:
         f.write(resp.content)
+    new_path = config.words_background
+    if new_path:
+        if os.path.exists(new_path):
+            path = new_path
+        else:
+            error(f"{new_path} not found!")
     return np.array(Image.open(path))

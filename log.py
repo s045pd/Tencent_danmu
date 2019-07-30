@@ -27,5 +27,3 @@ def warning(txt):
 
 def error(txt):
     return Loger.info(f"{makeStatus()} {colored(txt, 'red')}")
-
-

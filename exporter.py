@@ -2,7 +2,7 @@ import json
 
 import jieba
 import pandas
-from wordcloud import ImageColorGenerator, WordCloud
+from wordcloud import ImageColorGenerator, WordCloud, STOPWORDS
 
 from common import checkPath, checkTimes, error_log, initPath
 from log import success
@@ -27,18 +27,20 @@ def create_json(datas, filename="res.json"):
 
 @error_log()
 def create_singel_word_cloud(text, path, colors=None):
-    if not text:
-        return
-    #     initPath(path)
-    jiebares = " ".join(jieba.cut(text))
-    wc = WordCloud(
-        background_color="white",
-        font_path="HYQiHei-25J.ttf",
-        max_words=2000,
-        mask=colors,
-        max_font_size=100,
-        random_state=40,
-    )
-    wc.generate(jiebares)
-    wc.recolor(color_func=ImageColorGenerator(colors))
-    wc.to_file(f"{path}.png")
+    filename = f"{path}.png"
+    with checkTimes(msg=f"Saved {filename} "):
+        if not text:
+            return
+        jiebares = " ".join(jieba.cut(text))
+        wc = WordCloud(
+            background_color="black",
+            font_path="HYQiHei-25J.ttf",
+            max_words=2000,
+            mask=colors,
+            stopwords=STOPWORDS,
+            max_font_size=100,
+            random_state=45,
+        )
+        wc.generate(jiebares)
+        wc.recolor(color_func=ImageColorGenerator(colors))
+        wc.to_file(filename)
