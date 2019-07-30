@@ -54,13 +54,31 @@ Options:
 
 ## 案例
 
-1. 指定鹦鹉图片作为背景生成流浪地球词云
+1. 指定鹦鹉图片作为背景生成《流浪地球》词云,纯黑底色。
 
 ```
-python3 main.py -u https://v.qq.com/x/cover/3fvg46217gw800n/h0030qj4fov.html -w  -b ~/Desktop/pr.jpg
+python3 main.py -u https://v.qq.com/x/cover/3fvg46217gw800n/h0030qj4fov.html -wdv  -b ~/Desktop/pr.jpg
 ```
 
 ![lldq.png](.//media/lldq.png)
+
+2. 以海报为颜色模板生成《亲爱的，热爱得》词云，纯黑底色。并导出excel。
+
+```
+python3 main.py -u https://v.qq.com/x/cover/xbd1y6fvwl3maoz/t00313mumzy.html -wefd
+```
+
+- 词云
+
+![lldq.png](.//media/qad.png)
+
+- 弹幕excel
+
+![qad_excel.png](.//media/qad_excel.png)
+
+
+
+
 
 
 

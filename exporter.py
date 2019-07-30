@@ -48,7 +48,7 @@ def create_singel_word_cloud(text, path, colors=None):
         else:
             jiebares = " ".join(jiebares)
         wc = WordCloud(
-            background_color="white",
+            background_color="black" if conf.is_dark else "white",
             font_path="HYQiHei-25J.ttf",
             max_words=2000,
             mask=colors,

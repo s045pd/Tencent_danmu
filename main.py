@@ -268,6 +268,7 @@ class Spider(object):
 @click.option("-w", "--words", is_flag=True, help="是否生成词云")
 @click.option("-f", "--use_frequencies", is_flag=True, help="是否使用词频")
 @click.option("-b", "--words_background", default=None, help="指定词云背景图")
+@click.option("-d", "--is_dark", is_flag=True, help="是否为纯黑底色")
 @click.option("-g", "--graph", is_flag=True, help="是否生成分析图")
 def main(
     url,
@@ -279,6 +280,7 @@ def main(
     words,
     use_frequencies,
     words_background,
+    is_dark,
     graph,
 ):
     if url:
@@ -299,6 +301,8 @@ def main(
         conf.use_frequencies = use_frequencies
     if words_background:
         conf.words_background = words_background
+    if is_dark:
+        conf.is_dark = is_dark
     if graph:
         conf.need_graph = graph
     Spider().run()
