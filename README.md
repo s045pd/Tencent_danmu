@@ -66,11 +66,10 @@ Options:
 ```
 python3 main.py -u https://v.qq.com/x/cover/xbd1y6fvwl3maoz/t00313mumzy.html -wefd
 ```
-    - ### 词云
+    - 词云
     ![lldq.png](.//media/qad.png)
 
-    - ### 弹幕excel 
-
+    - 弹幕excel 
         - `upcount` 点赞数
         - `commentid` 弹幕ID
         - `opername` 发送人昵称
