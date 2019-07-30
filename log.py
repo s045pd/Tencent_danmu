@@ -2,15 +2,15 @@ import logging
 
 from termcolor import colored
 
-from conf import config
+from conf import conf
 
 
 def makeStatus():
-    return f"🏠:{colored(config.status['total'],'blue')} 🌀:{colored(config.status['fetching'],'blue')} ✅:{colored(config.status['success'],'green')} 🚫:{colored(config.status['failed'],'red')}] "
+    return f"🏠:{colored(conf.status['total'],'blue')} 🌀:{colored(conf.status['fetching'],'blue')} ✅:{colored(conf.status['success'],'green')} 🚫:{colored(conf.status['failed'],'red')}] "
 
 
 logging.basicConfig(format="[%(asctime)s]%(message)s", level=logging.INFO)
-Loger = logging.getLogger(config.name)
+Loger = logging.getLogger(conf.name)
 
 
 def info(txt):

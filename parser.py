@@ -1,4 +1,3 @@
-from conf import config
 from log import info
 import execjs
 

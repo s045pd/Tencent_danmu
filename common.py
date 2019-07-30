@@ -8,7 +8,7 @@ import numpy as np
 import requests
 from PIL import Image
 
-from conf import config
+from conf import conf
 from log import error, info, success
 
 
@@ -36,21 +36,21 @@ def error_log(default=None, need_raise=False):
 
 
 def addsucess():
-    config.status["success"] += 1
-    config.status["fetching"] -= 1
+    conf.status["success"] += 1
+    conf.status["fetching"] -= 1
 
 
 def addfailed():
-    config.status["failed"] += 1
-    config.status["fetching"] -= 1
+    conf.status["failed"] += 1
+    conf.status["fetching"] -= 1
 
 
 def addtotal():
-    config.status["total"] += 1
+    conf.status["total"] += 1
 
 
 def addupdate():
-    config.status["fetching"] += 1
+    conf.status["fetching"] += 1
 
 
 def checkPath(path):
@@ -76,16 +76,25 @@ def make_chunk(datas, length=512):
         yield chunk
 
 
+def read_stopwords(path="stopwords.txt"):
+    if path and os.path.exists(path):
+        with open(path, "r", encoding="utf8") as file:
+            return map(lambda item: item.strip(), file.readlines())
+    else:
+        error(f"stopwords [{path}] not found!")
+        return []
+
+
 @error_log()
 def get_pic_array(url, path):
     resp = requests.get(url)
     success(f"GET PIC From: {url}")
     with open(path, "wb") as f:
         f.write(resp.content)
-    new_path = config.words_background
+    new_path = conf.words_background
     if new_path:
         if os.path.exists(new_path):
             path = new_path
         else:
-            error(f"{new_path} not found!")
+            error(f"pic [{new_path}] not found!")
     return np.array(Image.open(path))

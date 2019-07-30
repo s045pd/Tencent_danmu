@@ -46,10 +46,22 @@ Options:
   -n, --new               不使用缓存生成
   -e, --excel             是否生成Excel
   -w, --words             是否生成词云
+  -b, --background        指定词云颜色背景
   -g, --graph             是否生成分析图(未做)
   --help                  Show this message and exit.
 
 ```
+
+## 案例
+
+1. 指定鹦鹉图片作为背景生成流浪地球词云
+
+```
+python3 main.py -u https://v.qq.com/x/cover/3fvg46217gw800n/h0030qj4fov.html -w  -b ~/Desktop/pr.jpg
+```
+
+![lldq.png](.//media/lldq.png)
+
 
 
 ## TODO

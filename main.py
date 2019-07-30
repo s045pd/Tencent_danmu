@@ -7,6 +7,7 @@ from io import BytesIO
 from parser import Parser
 from pprint import pprint
 
+
 import asks
 import click
 import jieba
@@ -22,7 +23,7 @@ from common import (
     checkPath,
     get_pic_array,
 )
-from conf import config
+from conf import conf
 from exporter import create_json, create_xlsx, create_singel_word_cloud
 from log import error, info, makeStatus, success, warning
 from PIL import Image
@@ -41,11 +42,11 @@ class Spider(object):
         self.__res_file_name = "res.json"
         self.__res_xlsx_name = "res.xlsx"
         self.__res_png_name = "res"
-        self.__limits = trio.CapacityLimiter(config.maxConnections * 10)
+        self.__limits = trio.CapacityLimiter(conf.maxConnections * 10)
 
     async def __init_session(self):
-        self.__async_session = asks.Session(connections=config.maxConnections)
-        self.__async_session.headers = config.fakeHeader
+        self.__async_session = asks.Session(connections=conf.maxConnections)
+        self.__async_session.headers = conf.fakeHeader
 
     async def __get_video_list(self, url):
         """Get video's HASH id list
@@ -97,7 +98,7 @@ class Spider(object):
                 "number": number,
                 "targetid": targetid,
                 "datas": {},
-                "single_max_count": 0 if not config.max_time else config.max_time,
+                "single_max_count": 0 if not conf.max_time else conf.max_time,
             }
 
     async def __get_sigle_danmu(self, item):
@@ -218,21 +219,21 @@ class Spider(object):
 
     def run(self):
         # https://v.qq.com/x/cover/3fvg46217gw800n/h0030qj4fov.html
-        if "https://v.qq.com/x/cover/" not in config.url:
+        if "https://v.qq.com/x/cover/" not in conf.url:
             error("not a video link!")
             exit()
         datas_path = None
         try:
             trio.run(self.__init_session)
-            trio.run(self.__get_video_list, config.url)
+            trio.run(self.__get_video_list, conf.url)
             datas_path = f"{self.__root_path}/{self.__res_file_name}"
-            if config.new or not checkPath(datas_path):
+            if conf.new or not checkPath(datas_path):
                 trio.run(self.__get_all_danmus, self.__cover_info)
             else:
                 with open(datas_path, "r") as file:
                     self.__results = json.loads(file.read())
             # tmp_res = sorted(self.__results.items(), key=lambda item: item[1]['number'])
-            if config.need_excel:
+            if conf.need_excel:
                 self.create_danmu_xlsx(
                     [
                         "upcount",
@@ -243,9 +244,9 @@ class Spider(object):
                         "content",
                     ]
                 )
-            if config.need_words:
+            if conf.need_words:
                 self.create_word_clouds()
-            if config.need_graph:
+            if conf.need_graph:
                 pass
         finally:
             create_json(self.__results, datas_path)
@@ -265,27 +266,41 @@ class Spider(object):
 @click.option("-n", "--new", is_flag=True, help="不使用缓存生成")
 @click.option("-e", "--excel", is_flag=True, help="是否生成Excel")
 @click.option("-w", "--words", is_flag=True, help="是否生成词云")
+@click.option("-f", "--use_frequencies", is_flag=True, help="是否使用词频")
 @click.option("-b", "--words_background", default=None, help="指定词云背景图")
 @click.option("-g", "--graph", is_flag=True, help="是否生成分析图")
-def main(url, max_time, vip, cons, new, excel, words, words_background, graph):
+def main(
+    url,
+    max_time,
+    vip,
+    cons,
+    new,
+    excel,
+    words,
+    use_frequencies,
+    words_background,
+    graph,
+):
     if url:
-        config.url = url
+        conf.url = url
     if max_time:
-        config.max_time = max_time
+        conf.max_time = max_time
     if vip:
-        config.max_time = 20000
+        conf.max_time = 20000
     if new:
-        config.new = new
+        conf.new = new
     if cons:
-        config.maxConnections = cons
+        conf.maxConnections = cons
     if excel:
-        config.need_excel = excel
+        conf.need_excel = excel
     if words:
-        config.need_words = words
+        conf.need_words = words
+    if use_frequencies:
+        conf.use_frequencies = use_frequencies
     if words_background:
-        config.words_background = words_background
+        conf.words_background = words_background
     if graph:
-        config.need_graph = graph
+        conf.need_graph = graph
     Spider().run()
 
 
